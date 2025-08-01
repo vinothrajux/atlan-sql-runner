@@ -3,6 +3,7 @@ import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/app/**/*.{ts,tsx}',         // Next.js App Router pages
     './src/components/**/*.{ts,tsx}',  // Atomic Design components

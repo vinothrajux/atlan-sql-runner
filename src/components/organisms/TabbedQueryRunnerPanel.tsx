@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import QueryInput from '../molecules/QueryInput';
 import ResultTable from '../molecules/ResultTable';
 import Button from '../atoms/Button';
+import { useTheme } from '../../context/ThemeProvider';
 import { downloadCSV } from '../../utils/download';
 
 type QueryTab = {
@@ -15,6 +16,7 @@ type QueryTab = {
 };
 
 export default function TabbedQueryRunnerPanel() {
+  const { theme, toggleTheme } = useTheme();
   const [tabs, setTabs] = useState<QueryTab[]>([
     { id: 1, title: 'Query 1', query: '', result: [] },
   ]);
@@ -95,9 +97,16 @@ export default function TabbedQueryRunnerPanel() {
     setTabs([...tabs, { id: newId, title: `Query ${newId}`, query: '', result: [] }]);
     setActiveTabId(newId);
   };
+  const bgClass = theme === 'light' ? 'bg-white text-black' : 'bg-black text-white';
 
   return (
     <div>
+      <Button onClick={toggleTheme}>
+        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+      </Button>
+      <div className={`${bgClass} p-4 rounded`}>
+      Theme test content
+    </div>
       {/* Tab Headers */}
       <div className="flex items-center space-x-2 mb-4">
         {tabs.map((tab) => (
