@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import QueryInput from '../molecules/QueryInput';
 import ResultTable from '../molecules/ResultTable';
 import Button from '../atoms/Button';
@@ -21,6 +21,17 @@ export default function TabbedQueryRunnerPanel() {
   const [activeTabId, setActiveTabId] = useState<number>(1);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)!;
+
+  const [tabPageMap, setTabPageMap] = useState<Record<number, number>>({});
+  const pageSize = 10;
+
+  const currentPage = tabPageMap[activeTabId] || 1;
+
+  // Memoize paginated result
+  const paginatedResult = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return activeTab.result.slice(start, start + pageSize);
+  }, [activeTab.result, currentPage]);
 
   const closeTab = (id: number) => {
     if (tabs.length <= 1) return;
@@ -52,16 +63,31 @@ export default function TabbedQueryRunnerPanel() {
     }
   };
 
-  const runQuery = (id: number) => {
-    const dummyResult = [
-      { id: 1, name: 'Alice', age: 25 },
-      { id: 2, name: 'Bob', age: 30 },
-    ];
-    setTabs(prev =>
-      prev.map(tab =>
-        tab.id === id ? { ...tab, result: dummyResult } : tab
-      )
-    );
+  const runQuery = async (id: number) => {
+    try {
+      const res = await fetch(
+        'https://raw.githubusercontent.com/graphql-compose/graphql-compose-examples/refs/heads/master/examples/northwind/data/csv/orders.csv'
+      );
+      const csv = await res.text();
+      const [headerLine, ...lines] = csv.trim().split('\n');
+      const headers = headerLine.split(',');
+
+      const jsonResult = lines.map((line) => {
+        const values = line.split(',');
+        return headers.reduce((obj, header, idx) => {
+          obj[header] = values[idx];
+          return obj;
+        }, {} as Record<string, string>);
+      });
+
+      setTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === id ? { ...tab, result: jsonResult } : tab
+        )
+      );
+    } catch (err) {
+      alert('Failed to fetch or parse CSV');
+    }
   };
 
   const addNewTab = () => {
@@ -126,7 +152,41 @@ export default function TabbedQueryRunnerPanel() {
         >
           Copy Query
         </Button>
-        <ResultTable data={activeTab.result} />
+        <ResultTable data={paginatedResult} />
+        {activeTab.result.length > pageSize && (
+          <div className="mt-2 flex justify-between text-sm">
+            <button
+              onClick={() =>
+                setTabPageMap((prev) => ({
+                  ...prev,
+                  [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
+                }))
+              }
+              disabled={currentPage === 1}
+              className="px-2 py-1 border rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span>
+              Page {currentPage} of {Math.ceil(activeTab.result.length / pageSize)}
+            </span>
+            <button
+              onClick={() =>
+                setTabPageMap((prev) => ({
+                  ...prev,
+                  [activeTabId]: Math.min(
+                    (prev[activeTabId] || 1) + 1,
+                    Math.ceil(activeTab.result.length / pageSize)
+                  ),
+                }))
+              }
+              disabled={currentPage === Math.ceil(activeTab.result.length / pageSize)}
+              className="px-2 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
