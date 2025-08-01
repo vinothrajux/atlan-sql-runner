@@ -43,6 +43,15 @@ export default function TabbedQueryRunnerPanel() {
     );
   };
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('Query copied to clipboard');
+    } catch (err) {
+      alert('Failed to copy query');
+    }
+  };
+
   const runQuery = (id: number) => {
     const dummyResult = [
       { id: 1, name: 'Alice', age: 25 },
@@ -109,6 +118,13 @@ export default function TabbedQueryRunnerPanel() {
           className="ml-2 bg-gray-600 hover:bg-gray-700"
         >
           Download CSV
+        </Button>
+        <Button
+          onClick={() => copyToClipboard(activeTab.query)}
+          disabled={!activeTab.query}
+          className="bg-gray-500 hover:bg-gray-600"
+        >
+          Copy Query
         </Button>
         <ResultTable data={activeTab.result} />
       </div>
