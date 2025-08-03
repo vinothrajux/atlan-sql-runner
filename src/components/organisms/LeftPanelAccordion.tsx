@@ -6,7 +6,7 @@ import { useState } from 'react';
 interface LeftPanelAccordionProps {
   tables: string[];
   history: string[];
-  onSelect: (query: string) => void;
+  // onSelect: (query: string) => void;
 }
 
 export default function LeftPanelAccordion({
