@@ -1,5 +1,3 @@
-// import QueryRunnerPanel from "../components/organisms/QueryRunnerPanel";
-import Header from "./Header";
 import TabbedQueryRunnerPanel from "../components/organisms/TabbedQueryRunnerPanel";
 import LeftPanelAccordion from "../components/organisms/LeftPanelAccordion";
 
@@ -30,7 +28,7 @@ const queryHistory = [
   return (
     <div className="flex min-h-screen">
       {/* Sidebar for this page */}
-      <aside className="w-64 bg-gray-100 dark:bg-gray-900 p-4">
+      <aside className="w-64 bg-gray-100 dark:bg-blue-700 p-4 dark:text-white">
         <LeftPanelAccordion
           tables={mockTables}
           history={queryHistory}
