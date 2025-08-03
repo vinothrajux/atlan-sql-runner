@@ -17,7 +17,7 @@ export default function RadixThemeSwitch() {
         id="theme-switch"
       >
         <Switch.Thumb
-          className={`block w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow transition-transform duration-200 absolute top-0 left-0 ${isDark ? 'translate-x-5' : 'translate-x-0'}`}
+          className={`block w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow transition-transform duration-200 absolute top-0.5 left-0 ${isDark ? 'translate-x-5' : 'translate-x-0'}`}
         />
       </Switch.Root>
     </div>

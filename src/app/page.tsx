@@ -3,8 +3,11 @@
 import TabbedQueryRunnerPanel from "../components/organisms/TabbedQueryRunnerPanel";
 import LeftPanelAccordion from "../components/organisms/LeftPanelAccordion";
 import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../context/ThemeProvider';
 
 export default function Home() {
+  const { theme } = useTheme();
+  console.log('Current theme:', theme);
   const mockTables = [
   'customers',
   'orders',
@@ -31,9 +34,9 @@ const queryHistory = [
   return (
     <div className="flex min-h-screen">
       {/* Sidebar for this page */}
-      <aside className="w-sm bg-gray-100 dark:bg-blue-700 p-4 dark:text-white">
+      <aside className={`w-sm  ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white`}>
         <div className="flex items-center mb-4">
-          <Bars3CenterLeftIcon className="h-6 w-6 text-blue-500 dark:text-white mr-2" />
+          <Bars3CenterLeftIcon className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} mr-2`} />
           <span className="font-semibold">Side Panel</span>
         </div>
         <LeftPanelAccordion

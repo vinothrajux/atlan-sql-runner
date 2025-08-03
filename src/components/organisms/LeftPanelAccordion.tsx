@@ -2,6 +2,9 @@
 
 import * as Accordion from '@radix-ui/react-accordion';
 import { useState } from 'react';
+import { useTheme } from '../../context/ThemeProvider';
+import { ClockIcon, TableCellsIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import './LeftPanelAccordion.css';
 
 interface LeftPanelAccordionProps {
   tables: string[];
@@ -15,6 +18,7 @@ export default function LeftPanelAccordion({
   // onSelect,
 }: LeftPanelAccordionProps) {
   const [search, setSearch] = useState('');
+  const { theme } = useTheme();
 
   const filteredTables = tables.filter((t) =>
     t.toLowerCase().includes(search.toLowerCase())
@@ -30,14 +34,17 @@ export default function LeftPanelAccordion({
         placeholder="Search tables / queries..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-2 rounded border bg-white dark:bg-gray-800 dark:text-white"
+        className="w-full p-2 rounded border bg-white text-gray-800"
       />
 
-      <Accordion.Root type="multiple" className="space-y-2">
-        <Accordion.Item value="tables" className="border rounded">
+      <Accordion.Root type="multiple" className="space-y-2" defaultValue={["tables", "history"]}>
+        <Accordion.Item value="tables" className="border rounded overflow-hidden">
           <Accordion.Header>
-            <Accordion.Trigger className="w-full text-left px-4 py-2 font-medium bg-gray-200 dark:bg-gray-700">
-              📂 Tables
+            <Accordion.Trigger className={`w-full flex items-center justify-between text-left px-4 py-2 font-medium text-gray-800 cursor-pointer ${theme === 'dark' ? 'bg-white' : 'bg-gray-200'}`}>
+              <span>
+                <TableCellsIcon className={`h-5 mr-1 inline table-icon ${theme === 'dark' ? 'text-gray-800' : 'text-blue-500'}`} /> Tables
+              </span>
+              <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 accordion-chevron" />
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">
@@ -55,10 +62,13 @@ export default function LeftPanelAccordion({
           </Accordion.Content>
         </Accordion.Item>
 
-        <Accordion.Item value="history" className="border rounded">
+        <Accordion.Item value="history" className="border rounded  overflow-hidden">
           <Accordion.Header>
-            <Accordion.Trigger className="w-full text-left px-4 py-2 font-medium bg-gray-200 dark:bg-gray-700">
-              📜 Query History
+            <Accordion.Trigger className={`w-full flex items-center justify-between text-left px-4 py-2 font-medium text-gray-800 cursor-pointer ${theme === 'dark' ? 'bg-white' : 'bg-gray-200'}`}>
+              <span>
+                <ClockIcon className={`h-5 mr-1 inline table-icon ${theme === 'dark' ? 'text-gray-800' : 'text-blue-500'}`} /> Query History
+              </span>
+              <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 accordion-chevron" />
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">

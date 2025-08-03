@@ -101,11 +101,7 @@ export default function TabbedQueryRunnerPanel() {
   const bgClass = theme === 'light' ? 'bg-white text-black' : 'bg-black text-white';
 
   return (
-    <div>
-      
-      <div className={`${bgClass} p-4 rounded`}>
-      Theme test content
-    </div>
+    <div>      
       {/* Tab Headers */}
       <div className="flex items-center space-x-2 mb-4">
         {tabs.map((tab) => (

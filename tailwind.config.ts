@@ -17,6 +17,21 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        primary: {
+          DEFAULT: 'red', // blue-600
+          light: '#3b82f6',  // blue-500
+          dark: '#1e40af',   // blue-800
+        },
+        accent: {
+          DEFAULT: '#f59e42', // orange-400
+          light: '#fbbf24',  // yellow-400
+          dark: '#b45309',   // yellow-800
+        },
+        neutral: {
+          DEFAULT: '#64748b', // slate-500
+          light: '#cbd5e1',  // slate-200
+          dark: '#334155',   // slate-800
+        },
       },
     },
   },
