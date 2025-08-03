@@ -16,14 +16,14 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const stored = localStorage.getItem('theme') as Theme;
     const initial = stored || 'light';
     setTheme(initial);
-    document.documentElement.classList.toggle('dark', initial === 'dark');
+    document.body.classList.toggle('dark', initial === 'dark');
   }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    document.body.classList.toggle('dark', newTheme === 'dark');
   };
 
   return (

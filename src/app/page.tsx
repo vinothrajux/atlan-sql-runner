@@ -1,5 +1,8 @@
+'use client';
+
 import TabbedQueryRunnerPanel from "../components/organisms/TabbedQueryRunnerPanel";
 import LeftPanelAccordion from "../components/organisms/LeftPanelAccordion";
+import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline';
 
 export default function Home() {
   const mockTables = [
@@ -28,7 +31,11 @@ const queryHistory = [
   return (
     <div className="flex min-h-screen">
       {/* Sidebar for this page */}
-      <aside className="w-64 bg-gray-100 dark:bg-blue-700 p-4 dark:text-white">
+      <aside className="w-sm bg-gray-100 dark:bg-blue-700 p-4 dark:text-white">
+        <div className="flex items-center mb-4">
+          <Bars3CenterLeftIcon className="h-6 w-6 text-blue-500 dark:text-white mr-2" />
+          <span className="font-semibold">Side Panel</span>
+        </div>
         <LeftPanelAccordion
           tables={mockTables}
           history={queryHistory}

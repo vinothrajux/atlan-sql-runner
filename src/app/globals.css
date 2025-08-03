@@ -4,6 +4,7 @@
 
 :root {
   --background: #ffffff;
+  --background-dark: #3153DD;
   --foreground: #171717;
 }
 
@@ -20,7 +21,7 @@ body {
   font-family: 'Avenir', Arial, sans-serif;
 }
 
-.dark body {
-  background: var(--foreground);
+.dark {
+  background: var(--background-dark);
   color: var(--background);
 }
