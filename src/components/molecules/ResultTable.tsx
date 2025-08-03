@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>[];
-  totalResultCount: number;
+  totalResultCount?: number;
 };
 
 export default function ResultTable({ data, totalResultCount }: Props) {
