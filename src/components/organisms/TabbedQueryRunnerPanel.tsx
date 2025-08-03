@@ -25,7 +25,8 @@ export default function TabbedQueryRunnerPanel() {
   const activeTab = tabs.find(tab => tab.id === activeTabId)!;
 
   const [tabPageMap, setTabPageMap] = useState<Record<number, number>>({});
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
+  const pageSizeOptions = [10, 20, 50, 100];
 
   const currentPage = tabPageMap[activeTabId] || 1;
 
@@ -33,7 +34,7 @@ export default function TabbedQueryRunnerPanel() {
   const paginatedResult = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     return activeTab.result.slice(start, start + pageSize);
-  }, [activeTab.result, currentPage]);
+  }, [activeTab.result, currentPage, pageSize]);
 
   const closeTab = (id: number) => {
     if (tabs.length <= 1) return;
@@ -101,9 +102,7 @@ export default function TabbedQueryRunnerPanel() {
 
   return (
     <div>
-      <Button onClick={toggleTheme}>
-        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-      </Button>
+      
       <div className={`${bgClass} p-4 rounded`}>
       Theme test content
     </div>
@@ -161,39 +160,57 @@ export default function TabbedQueryRunnerPanel() {
         >
           Copy Query
         </Button>
-        <ResultTable data={paginatedResult} />
+        <ResultTable data={paginatedResult} totalResultCount={activeTab.result.length} />
         {activeTab.result.length > pageSize && (
-          <div className="mt-2 flex justify-between text-sm">
-            <button
-              onClick={() =>
-                setTabPageMap((prev) => ({
-                  ...prev,
-                  [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
-                }))
-              }
-              disabled={currentPage === 1}
-              className="px-2 py-1 border rounded disabled:opacity-50"
-            >
-              Prev
-            </button>
-            <span>
-              Page {currentPage} of {Math.ceil(activeTab.result.length / pageSize)}
-            </span>
-            <button
-              onClick={() =>
-                setTabPageMap((prev) => ({
-                  ...prev,
-                  [activeTabId]: Math.min(
-                    (prev[activeTabId] || 1) + 1,
-                    Math.ceil(activeTab.result.length / pageSize)
-                  ),
-                }))
-              }
-              disabled={currentPage === Math.ceil(activeTab.result.length / pageSize)}
-              className="px-2 py-1 border rounded disabled:opacity-50"
-            >
-              Next
-            </button>
+          <div className="mt-2 flex flex-col gap-2 text-sm">
+            <div className="flex items-center gap-2">
+              <label htmlFor="rowsPerPage">Rows per page:</label>
+              <select
+                id="rowsPerPage"
+                value={pageSize}
+                onChange={e => {
+                  setPageSize(Number(e.target.value));
+                  setTabPageMap(prev => ({ ...prev, [activeTabId]: 1 })); // Reset to page 1
+                }}
+                className="border rounded px-2 py-1"
+              >
+                {pageSizeOptions.map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-between items-center">
+              <button
+                onClick={() =>
+                  setTabPageMap((prev) => ({
+                    ...prev,
+                    [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
+                  }))
+                }
+                disabled={currentPage === 1}
+                className="px-2 py-1 border rounded disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <span>
+                Page {currentPage} of {Math.ceil(activeTab.result.length / pageSize)}
+              </span>
+              <button
+                onClick={() =>
+                  setTabPageMap((prev) => ({
+                    ...prev,
+                    [activeTabId]: Math.min(
+                      (prev[activeTabId] || 1) + 1,
+                      Math.ceil(activeTab.result.length / pageSize)
+                    ),
+                  }))
+                }
+                disabled={currentPage === Math.ceil(activeTab.result.length / pageSize)}
+                className="px-2 py-1 border rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </div>
