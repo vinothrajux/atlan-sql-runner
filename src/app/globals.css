@@ -19,3 +19,8 @@ body {
   color: var(--foreground);
   font-family: 'Avenir', Arial, sans-serif;
 }
+
+.dark body {
+  background: var(--foreground);
+  color: var(--background);
+}
