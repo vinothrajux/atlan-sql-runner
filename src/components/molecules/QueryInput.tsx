@@ -1,4 +1,5 @@
-import TextArea from "../atoms/TextArea";
+import Controlled from "@uiw/react-codemirror";
+import { sql } from "@codemirror/lang-sql";
 
 type Props = {
   value: string;
@@ -7,8 +8,14 @@ type Props = {
 
 export default function QueryInput({ value, onChange }: Props) {
   return (
-    <div className="mb-4">
-      <TextArea value={value} onChange={(e) => onChange(e.target.value)} placeholder="Enter SQL query here..." />
+    <div className="mb-4 w-100%">
+      <Controlled
+        value={value}
+        height="200px"
+        extensions={[sql()]}
+        onChange={(val) => onChange(val)}
+        placeholder="Enter SQL query here..."
+      />
     </div>
   );
 }
