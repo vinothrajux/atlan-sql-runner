@@ -13,7 +13,7 @@ export default function RadixThemeSwitch() {
       <Switch.Root
         checked={isDark}
         onCheckedChange={toggleTheme}
-        className="w-10 h-6 bg-gray-300 dark:bg-gray-700 rounded-full relative focus:outline-none"
+        className="w-10 h-6 bg-gray-300 dark:bg-gray-700 rounded-full relative focus:outline-none cursor-pointer"
         id="theme-switch"
       >
         <Switch.Thumb

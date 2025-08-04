@@ -21,6 +21,7 @@ export default function TabbedQueryRunnerPanel() {
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)!;
 
@@ -71,12 +72,14 @@ export default function TabbedQueryRunnerPanel() {
   const runQuery = async (id: number) => {
     try {
       setErrorMessage(null);
+      setIsLoading(true);
       const tab = tabs.find(t => t.id === id);
       if (!tab) return;
       // Only run for queries matching: select * from <tablename>;
       const match = tab.query.trim().match(/^select \* from ([a-zA-Z0-9_]+);$/i);
       if (!match) {
         setErrorMessage('Only queries in the format: select * from <tablename>; are supported.');
+        setIsLoading(false);
         return;
       }
       const tableName = match[1];
@@ -99,8 +102,18 @@ export default function TabbedQueryRunnerPanel() {
           tab.id === id ? { ...tab, result: jsonResult } : tab
         )
       );
+      // Save query to localStorage history
+      const query = tab.query.trim();
+      const stored = localStorage.getItem('queryHistory');
+      let historyArr: string[] = stored ? JSON.parse(stored) : [];
+      historyArr = [query, ...historyArr.filter(q => q !== query)].slice(0, 50);
+      localStorage.setItem('queryHistory', JSON.stringify(historyArr));
+      // Trigger refresh event for LeftPanelAccordion
+      window.dispatchEvent(new Event('refresh-query-history'));
     } catch {
       setErrorMessage('Failed to fetch or parse CSV');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -163,36 +176,80 @@ export default function TabbedQueryRunnerPanel() {
       </div>
 
       {/* Active Tab Content */}
-      <div className=' rounded-lg shadow-sm'>
+      <div className=' rounded-lg shadow-xl'>
         
         <QueryInput
           value={activeTab.query}
           onChange={(val) => updateTabQuery(activeTab.id, val)}
         />
-        <div className={`p-4 border border-gray-300 border-t-0`}>
-          <Button className='mr-2' onClick={() => runQuery(activeTab.id)}><PlayIcon className='h-4 w-4 inline mb-1'/> Run Query</Button>
+        <div className={`p-4 border border-gray-300 border-t-0 flex flex-wrap gap-2 items-center justify-between`}>
+          <Button
+            className="flex items-center gap-1 px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 shadow text-xs font-medium cursor-pointer"
+            onClick={() => runQuery(activeTab.id)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <svg className="animate-spin h-4 w-4 mr-1 text-white" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 11-8 8z" />
+              </svg>
+            ) : (
+              <PlayIcon className='h-4 w-4'/>
+            )}
+            Run Query
+          </Button>
           {activeTab.result.length > 0 && (
-            <Button
-              onClick={() => downloadCSV(activeTab.result, `${activeTab.title.replace(' ', '_')}.csv`)}
-              disabled={activeTab.result.length === 0}
-              className="bg-gray-600 hover:bg-gray-700 mr-2"
-            >
-              <ArrowDownTrayIcon className='h-4 w-4 inline mb-1.5 mr-2' />Download CSV
-            </Button>
+            <div className="flex items-center gap-1 ml-auto">
+              <div className="flex items-center gap-1">
+                <select
+                  id="downloadFormat"
+                  className="px-1 py-0.5 rounded border bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 text-xs font-medium shadow focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                  style={{ minWidth: 55, height: '24px' }}
+                  defaultValue="csv"
+                >
+                  <option value="csv">CSV</option>
+                  <option value="json">JSON</option>
+                </select>
+                <Button
+                  onClick={() => {
+                    const format = (document.getElementById('downloadFormat') as HTMLSelectElement).value;
+                    if (format === 'csv') {
+                      downloadCSV(activeTab.result, `${activeTab.title.replace(' ', '_')}.csv`);
+                    } else {
+                      const jsonStr = JSON.stringify(activeTab.result, null, 2);
+                      const blob = new Blob([jsonStr], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `${activeTab.title.replace(' ', '_')}.json`;
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                    }
+                  }}
+                  disabled={activeTab.result.length === 0}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-600 text-white hover:bg-emerald-700 shadow text-xs font-medium cursor-pointer"
+                >
+                  <ArrowDownTrayIcon className='h-4 w-4' /> Download
+                </Button>
+              </div>
+            </div>
           )}
           {activeTab.query.length > 0 && (
             <Button
               onClick={() => copyToClipboard(activeTab.query)}
               disabled={!activeTab.query}
-              className="bg-gray-500 hover:bg-gray-600"
+              className="flex items-center gap-1 px-2 py-1 rounded bg-orange-500 text-white hover:bg-orange-600 shadow text-xs font-medium cursor-pointer"
             >
-              <DocumentDuplicateIcon className='h-4 w-4 inline mb-1 mr-1' />Copy Query
+              <DocumentDuplicateIcon className='h-4 w-4' /> Copy Query
             </Button>
           )}
-          
+          <div className='w-full'>
           <ResultTable data={paginatedResult} totalResultCount={activeTab.result.length} />
+          </div>
           {activeTab.result.length > pageSize && (
-            <div className="mt-2 flex flex-col gap-2 text-sm">
+            <div className="mt-2 flex flex-col gap-2 text-sm w-full">
               <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 p-2 rounded-lg shadow-sm">
                 <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-sm font-medium mr-2">Rows per page:</label>
                 <select

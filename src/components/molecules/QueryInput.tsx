@@ -11,7 +11,7 @@ type Props = {
 export default function QueryInput({ value, onChange }: Props) {
   const { theme } = useTheme();
   return (
-    <div className="w-100%">
+    <div className="w-100% border-gray-300 border border-t-0">
       <Controlled
         value={value}
         height="250px"
