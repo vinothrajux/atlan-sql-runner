@@ -108,6 +108,8 @@ export default function TabbedQueryRunnerPanel() {
       let historyArr: string[] = stored ? JSON.parse(stored) : [];
       historyArr = [query, ...historyArr.filter(q => q !== query)].slice(0, 50);
       localStorage.setItem('queryHistory', JSON.stringify(historyArr));
+      // Dispatch event to refresh sidebar history immediately
+      window.dispatchEvent(new Event('refresh-query-history'));
     } catch {
       setErrorMessage('Failed to fetch or parse CSV');
     } finally {
