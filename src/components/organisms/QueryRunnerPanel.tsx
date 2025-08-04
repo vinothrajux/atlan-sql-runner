@@ -4,6 +4,7 @@ import QueryInput from "../molecules/QueryInput";
 import ResultTable from "../molecules/ResultTable";
 // Update the import path below to the correct relative path if needed
 import Button from "../atoms/Button";
+import { PlayIcon } from "@heroicons/react/24/outline";
 
 export default function QueryRunnerPanel() {
   const [query, setQuery] = useState("");
@@ -22,7 +23,7 @@ export default function QueryRunnerPanel() {
   return (
     <div>
       <QueryInput value={query} onChange={setQuery} />
-      <Button onClick={runQuery}>Run Query</Button>
+      <Button onClick={runQuery}><PlayIcon /> Run Query</Button>
       <ResultTable data={data} />
     </div>
   );

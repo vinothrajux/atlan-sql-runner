@@ -1,5 +1,7 @@
 import Controlled from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
+import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
+import { useTheme } from "../../context/ThemeProvider";
 
 type Props = {
   value: string;
@@ -7,14 +9,17 @@ type Props = {
 };
 
 export default function QueryInput({ value, onChange }: Props) {
+  const { theme } = useTheme();
   return (
-    <div className="mb-4 w-100%">
+    <div className="w-100%">
       <Controlled
         value={value}
-        height="200px"
+        height="250px"
         extensions={[sql()]}
+        theme={theme === "dark" ? vscodeDark : vscodeLight}
         onChange={(val) => onChange(val)}
         placeholder="Enter SQL query here..."
+        style={{ fontSize: "14px" }}
       />
     </div>
   );

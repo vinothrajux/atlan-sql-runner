@@ -25,12 +25,12 @@ export default function ResultTable({ data, totalResultCount }: Props) {
   };
 
   return (
-    <div>
+    <div className="mt-6">
       <div>
-        <h2>Table Summary</h2>
-        <div>
-          <p>Total Rows: {totalResultCount}</p>
-          <p>Columns: {columns.length}</p>
+        <h2 className='text-2xl font-medium mb-3'>Table Summary</h2>
+        <div className='flex gap-4'>
+          <p><span className='text-gray-500'>Total Rows </span><span className='block'>{totalResultCount}</span></p>
+          <p><span className='text-gray-500'>Columns </span><span className='block'>{columns.length}</span></p>
         </div>
       </div>
       <div className="flex gap-4 my-2 flex-wrap">
