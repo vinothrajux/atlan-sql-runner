@@ -9,3 +9,7 @@
 [data-state="open"] .accordion-chevron {
   transform: rotate(180deg);
 }
+
+.accordionlist:hover .icon-in-list {
+  color: #1e2939;
+}

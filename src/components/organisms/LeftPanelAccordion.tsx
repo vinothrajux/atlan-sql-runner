@@ -93,15 +93,15 @@ export default function LeftPanelAccordion({
               {filteredTables.map((table) => (
                 <li
                   key={table}
-                  className={`cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list`}
+                  className={`${theme === 'dark' ? 'accordionlist' : ''} cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list hover:text-gray-800`}
                   onClick={() => {
                     if (typeof onSelect === 'function') {
                       onSelect(`SELECT * FROM ${table};`);
                     }
                   }}
                 >
-                  <QueueListIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400 icon-in-list" />
-                  <span className="truncate font-medium text-in-list hover:text-gray-500">{table}</span>
+                  <QueueListIcon className={`h-4 w-4 text-blue-500 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} dark:text-zinc-400 icon-in-list`} />
+                  <span className="truncate font-medium text-in-list">{table}</span>
                 </li>
               ))}
             </ul>
@@ -123,14 +123,14 @@ export default function LeftPanelAccordion({
                 <li
                   key={i}
                   title={q}
-                  className={`cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list`}
+                  className={`${theme === 'dark' ? 'accordionlist' : ''} cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list hover:text-gray-800`}
                   onClick={() => {
                     if (typeof onSelect === 'function') {
                       onSelect(q);
                     }
                   }}
                 >
-                  <ChevronRightIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400 icon-in-list" />
+                  <QueueListIcon className={`h-4 w-4 text-blue-500 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} dark:text-zinc-400 icon-in-list`} />
                   <span className="truncate text-in-list" title={q}>{q.slice(0, 60)}...</span>
                 </li>
               ))}
