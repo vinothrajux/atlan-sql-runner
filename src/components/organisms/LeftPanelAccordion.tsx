@@ -75,11 +75,11 @@ export default function LeftPanelAccordion({
         placeholder="Search tables / queries..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full p-2 rounded border bg-white text-gray-800"
+        className="w-full p-2 rounded border bg-white text-gray-800 border-gray-300 shadow-xl mb-6"
       />
 
       <Accordion.Root type="multiple" className="space-y-2" defaultValue={["tables", "history"]}>
-        <Accordion.Item value="tables" className="border rounded overflow-hidden">
+        <Accordion.Item value="tables" className="border border-gray-300 mb-6 rounded overflow-hidden shadow-xl">
           <Accordion.Header>
             <Accordion.Trigger className={`w-full flex items-center justify-between text-left px-4 py-2 font-medium text-gray-800 cursor-pointer ${theme === 'dark' ? 'bg-white' : 'bg-gray-200'}`}>
               <span>
@@ -108,7 +108,7 @@ export default function LeftPanelAccordion({
           </Accordion.Content>
         </Accordion.Item>
 
-        <Accordion.Item value="history" className="border rounded  overflow-hidden">
+        <Accordion.Item value="history" className="border border-gray-300 rounded shadow-xl overflow-hidden">
           <Accordion.Header>
             <Accordion.Trigger className={`w-full flex items-center justify-between text-left px-4 py-2 font-medium text-gray-800 cursor-pointer ${theme === 'dark' ? 'bg-white' : 'bg-gray-200'}`}>
               <span>
