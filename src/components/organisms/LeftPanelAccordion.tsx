@@ -3,7 +3,7 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../../context/ThemeProvider';
-import { ClockIcon, TableCellsIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, TableCellsIcon, ChevronDownIcon, QueueListIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import './LeftPanelAccordion.css';
 
 interface LeftPanelAccordionProps {
@@ -93,15 +93,15 @@ export default function LeftPanelAccordion({
               {filteredTables.map((table) => (
                 <li
                   key={table}
-                  className="cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2"
+                  className={`cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list`}
                   onClick={() => {
                     if (typeof onSelect === 'function') {
                       onSelect(`SELECT * FROM ${table};`);
                     }
                   }}
                 >
-                  <TableCellsIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400" />
-                  <span className="truncate font-medium">{table}</span>
+                  <QueueListIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400 icon-in-list" />
+                  <span className="truncate font-medium text-in-list hover:text-gray-500">{table}</span>
                 </li>
               ))}
             </ul>
@@ -122,15 +122,16 @@ export default function LeftPanelAccordion({
               {filteredHistory.map((q, i) => (
                 <li
                   key={i}
-                  className="cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2"
+                  title={q}
+                  className={`cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2 dark-hover-list`}
                   onClick={() => {
                     if (typeof onSelect === 'function') {
                       onSelect(q);
                     }
                   }}
                 >
-                  <ClockIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400" />
-                  <span className="truncate" title={q}>{q.slice(0, 60)}...</span>
+                  <ChevronRightIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400 icon-in-list" />
+                  <span className="truncate text-in-list" title={q}>{q.slice(0, 60)}...</span>
                 </li>
               ))}
             </ul>

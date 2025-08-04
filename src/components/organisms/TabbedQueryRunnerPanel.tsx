@@ -136,7 +136,13 @@ export default function TabbedQueryRunnerPanel() {
   return (
     <div>      
       {errorMessage && (
-        <div className="mb-2 px-4 py-2 rounded bg-red-100 text-red-700 border border-red-300 animate-fade-in">
+        <div
+          className={`mb-2 px-4 py-2 rounded border animate-fade-in ${
+            errorMessage === 'Query copied to clipboard'
+              ? 'bg-green-100 text-green-700 border-green-300'
+              : 'bg-red-100 text-red-700 border-red-300'
+          }`}
+        >
           {errorMessage}
         </div>
       )}
@@ -248,57 +254,59 @@ export default function TabbedQueryRunnerPanel() {
           <div className='w-full'>
           <ResultTable data={paginatedResult} totalResultCount={activeTab.result.length} />
           </div>
-          {/* Always show pagination controls, but disable them if only one page */}
-          <div className="mt-2 flex flex-col gap-2 text-sm w-full">
-            <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 p-2 rounded-lg shadow-sm">
-              <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-sm font-medium mr-2">Rows per page:</label>
-              <select
-                id="rowsPerPage"
-                value={pageSize}
-                onChange={e => {
-                  setPageSize(Number(e.target.value));
-                  setTabPageMap(prev => ({ ...prev, [activeTabId]: 1 })); // Reset to page 1
-                }}
-                className="border border-gray-300 dark:border-zinc-700 rounded px-2 py-1 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-400"
-              >
-                {pageSizeOptions.map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-              <div className="flex items-center gap-2 ml-auto">
-                <button
-                  onClick={() =>
-                    setTabPageMap((prev) => ({
-                      ...prev,
-                      [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
-                    }))
-                  }
-                  disabled={currentPage === 1 || Math.ceil(activeTab.result.length / pageSize) <= 1}
-                  className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+          {/* Hide pagination if there are no results */}
+          {activeTab.result.length > 0 && (
+            <div className="mt-2 flex flex-col gap-2 text-sm w-full">
+              <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 p-2 rounded-lg shadow-sm">
+                <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-sm font-medium mr-2">Rows per page:</label>
+                <select
+                  id="rowsPerPage"
+                  value={pageSize}
+                  onChange={e => {
+                    setPageSize(Number(e.target.value));
+                    setTabPageMap(prev => ({ ...prev, [activeTabId]: 1 })); // Reset to page 1
+                  }}
+                  className="border border-gray-300 dark:border-zinc-700 rounded px-2 py-1 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-400"
                 >
-                  <span className="inline-block mr-1">⟨</span> Prev
-                </button>
-                <span className="px-2 text-gray-700 dark:text-gray-200 font-medium">
-                  Page <span className="font-semibold text-blue-600 dark:text-blue-400">{currentPage}</span> of <span className="font-semibold text-blue-600 dark:text-blue-400">{Math.max(1, Math.ceil(activeTab.result.length / pageSize))}</span>
-                </span>
-                <button
-                  onClick={() =>
-                    setTabPageMap((prev) => ({
-                      ...prev,
-                      [activeTabId]: Math.min(
-                        (prev[activeTabId] || 1) + 1,
-                        Math.ceil(activeTab.result.length / pageSize)
-                      ),
-                    }))
-                  }
-                  disabled={currentPage === Math.ceil(activeTab.result.length / pageSize) || Math.ceil(activeTab.result.length / pageSize) <= 1}
-                  className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
-                >
-                  Next <span className="inline-block ml-1">⟩</span>
-                </button>
+                  {pageSizeOptions.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <div className="flex items-center gap-2 ml-auto">
+                  <button
+                    onClick={() =>
+                      setTabPageMap((prev) => ({
+                        ...prev,
+                        [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
+                      }))
+                    }
+                    disabled={currentPage === 1 || Math.ceil(activeTab.result.length / pageSize) <= 1}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                  >
+                    <span className="inline-block mr-1">⟨</span> Prev
+                  </button>
+                  <span className="px-2 text-gray-700 dark:text-gray-200 font-medium">
+                    Page <span className="font-semibold text-blue-600 dark:text-blue-400">{currentPage}</span> of <span className="font-semibold text-blue-600 dark:text-blue-400">{Math.max(1, Math.ceil(activeTab.result.length / pageSize))}</span>
+                  </span>
+                  <button
+                    onClick={() =>
+                      setTabPageMap((prev) => ({
+                        ...prev,
+                        [activeTabId]: Math.min(
+                          (prev[activeTabId] || 1) + 1,
+                          Math.ceil(activeTab.result.length / pageSize)
+                        ),
+                      }))
+                    }
+                    disabled={currentPage === Math.ceil(activeTab.result.length / pageSize) || Math.ceil(activeTab.result.length / pageSize) <= 1}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                  >
+                    Next <span className="inline-block ml-1">⟩</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
