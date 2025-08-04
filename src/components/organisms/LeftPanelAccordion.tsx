@@ -1,7 +1,7 @@
 'use client';
 
 import * as Accordion from '@radix-ui/react-accordion';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTheme } from '../../context/ThemeProvider';
 import { ClockIcon, TableCellsIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import './LeftPanelAccordion.css';
@@ -20,12 +20,53 @@ export default function LeftPanelAccordion({
   const [search, setSearch] = useState('');
   const { theme } = useTheme();
 
+  const [localHistory, setLocalHistory] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('queryHistory');
+      if (stored) return JSON.parse(stored);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('queryHistory');
+      if (stored) setLocalHistory(JSON.parse(stored));
+    }
+  }, [history]);
+
+  useEffect(() => {
+    const handleRefreshHistory = () => {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('queryHistory');
+        if (stored) setLocalHistory(JSON.parse(stored));
+      }
+    };
+    window.addEventListener('refresh-query-history', handleRefreshHistory);
+    return () => window.removeEventListener('refresh-query-history', handleRefreshHistory);
+  }, []);
+
+  // Add this effect to update localHistory immediately when search or localStorage changes
+  useEffect(() => {
+    setFilteredHistory(
+      [...localHistory, ...history.filter(q => !localHistory.includes(q))].filter((q) => q.toLowerCase().includes(search.toLowerCase()))
+    );
+  }, [localHistory, history, search]);
+
+  const combinedHistory = useMemo(() => {
+    return [...localHistory, ...history.filter(q => !localHistory.includes(q))];
+  }, [localHistory, history]);
+
   const filteredTables = tables.filter((t) =>
     t.toLowerCase().includes(search.toLowerCase())
   );
-  const filteredHistory = history.filter((q) =>
-    q.toLowerCase().includes(search.toLowerCase())
-  );
+  const [filteredHistory, setFilteredHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilteredHistory(
+      combinedHistory.filter((q) => q.toLowerCase().includes(search.toLowerCase()))
+    );
+  }, [combinedHistory, search]);
 
   return (
     <div className="space-y-4">
