@@ -32,9 +32,9 @@ const queryHistory = [
   'SELECT category_name, COUNT(*) FROM products GROUP BY category_name;',
 ];
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-screen overflow-hidden">
       {/* Sidebar for this page */}
-      <aside className={`flex-shrink-0 w-96 ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white`}>
+      <aside className={`flex-shrink-0 w-96 max-w-md ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white h-screen overflow-y-auto`}>
         <div className="flex items-center mb-4">
           <Bars3CenterLeftIcon className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} mr-2`} />
           <span className="font-semibold">Side Panel</span>
@@ -42,12 +42,17 @@ const queryHistory = [
         <LeftPanelAccordion
           tables={mockTables}
           history={queryHistory}
-          // onSelect={(query) => updateActiveTabQuery(query)} // connect to tab logic
+          onSelect={(query) => {
+            // Fill the active tab's query input with the selected query
+            // updateTabQuery is available in TabbedQueryRunnerPanel, so we need to lift it up
+            // We'll use a ref and callback
+            window.dispatchEvent(new CustomEvent('fill-active-tab-query', { detail: query }));
+          }}
         />
       </aside>
 
       {/* Main content next to sidebar */}
-      <main className="flex-1 p-6 bg-white dark:bg-black text-black dark:text-white">
+      <main className="flex-1 p-6 bg-white dark:bg-black text-black dark:text-white h-screen overflow-y-auto max-w-full">
         <TabbedQueryRunnerPanel />
       </main>
     </div>

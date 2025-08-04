@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import QueryInput from '../molecules/QueryInput';
 import ResultTable from '../molecules/ResultTable';
 import Button from '../atoms/Button';
@@ -109,6 +109,16 @@ export default function TabbedQueryRunnerPanel() {
     setTabs([...tabs, { id: newId, title: `Query ${newId}`, query: '', result: [] }]);
     setActiveTabId(newId);
   }
+
+  useEffect(() => {
+    const handler = (e: CustomEvent) => {
+      updateTabQuery(activeTabId, e.detail);
+    };
+    window.addEventListener('fill-active-tab-query', handler as EventListener);
+    return () => {
+      window.removeEventListener('fill-active-tab-query', handler as EventListener);
+    };
+  }, [activeTabId]);
 
   return (
     <div>      
