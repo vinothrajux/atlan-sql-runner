@@ -4,9 +4,8 @@ import { useState, useMemo } from 'react';
 import QueryInput from '../molecules/QueryInput';
 import ResultTable from '../molecules/ResultTable';
 import Button from '../atoms/Button';
-import { useTheme } from '../../context/ThemeProvider';
 import { downloadCSV } from '../../utils/download';
-import { ArrowDownTrayIcon, CommandLineIcon, DocumentDuplicateIcon, PlayIcon, PlusIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon, CommandLineIcon, DocumentDuplicateIcon, PlayIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 type QueryTab = {
   id: number;
@@ -17,11 +16,11 @@ type QueryTab = {
 };
 
 export default function TabbedQueryRunnerPanel() {
-  const { theme, toggleTheme } = useTheme();
   const [tabs, setTabs] = useState<QueryTab[]>([
     { id: 1, title: 'Query 1', query: '', result: [] },
   ]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)!;
 
@@ -61,21 +60,33 @@ export default function TabbedQueryRunnerPanel() {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert('Query copied to clipboard');
-    } catch (err) {
-      alert('Failed to copy query');
+      setErrorMessage('Query copied to clipboard');
+      setTimeout(() => setErrorMessage(null), 2000);
+    } catch {
+      setErrorMessage('Failed to copy query');
+      setTimeout(() => setErrorMessage(null), 3000);
     }
   };
 
   const runQuery = async (id: number) => {
     try {
+      setErrorMessage(null);
+      const tab = tabs.find(t => t.id === id);
+      if (!tab) return;
+      // Only run for queries matching: select * from <tablename>;
+      const match = tab.query.trim().match(/^select \* from ([a-zA-Z0-9_]+);$/i);
+      if (!match) {
+        setErrorMessage('Only queries in the format: select * from <tablename>; are supported.');
+        return;
+      }
+      const tableName = match[1];
       const res = await fetch(
-        'https://raw.githubusercontent.com/graphql-compose/graphql-compose-examples/refs/heads/master/examples/northwind/data/csv/orders.csv'
+        `https://raw.githubusercontent.com/graphql-compose/graphql-compose-examples/refs/heads/master/examples/northwind/data/csv/${tableName}.csv`
       );
+      if (!res.ok) throw new Error('CSV file not found');
       const csv = await res.text();
       const [headerLine, ...lines] = csv.trim().split('\n');
       const headers = headerLine.split(',');
-
       const jsonResult = lines.map((line) => {
         const values = line.split(',');
         return headers.reduce((obj, header, idx) => {
@@ -83,14 +94,13 @@ export default function TabbedQueryRunnerPanel() {
           return obj;
         }, {} as Record<string, string>);
       });
-
       setTabs((prev) =>
         prev.map((tab) =>
           tab.id === id ? { ...tab, result: jsonResult } : tab
         )
       );
-    } catch (err) {
-      alert('Failed to fetch or parse CSV');
+    } catch {
+      setErrorMessage('Failed to fetch or parse CSV');
     }
   };
 
@@ -98,11 +108,15 @@ export default function TabbedQueryRunnerPanel() {
     const newId = tabs.length + 1;
     setTabs([...tabs, { id: newId, title: `Query ${newId}`, query: '', result: [] }]);
     setActiveTabId(newId);
-  };
-  const bgClass = theme === 'light' ? 'bg-white text-black' : 'bg-black text-white';
+  }
 
   return (
     <div>      
+      {errorMessage && (
+        <div className="mb-2 px-4 py-2 rounded bg-red-100 text-red-700 border border-red-300 animate-fade-in">
+          {errorMessage}
+        </div>
+      )}
       {/* Tab Headers */}
       <div className="flex items-center">
         {tabs.map((tab) => (
@@ -140,6 +154,7 @@ export default function TabbedQueryRunnerPanel() {
 
       {/* Active Tab Content */}
       <div className=' rounded-lg shadow-sm'>
+        
         <QueryInput
           value={activeTab.query}
           onChange={(val) => updateTabQuery(activeTab.id, val)}
@@ -168,8 +183,8 @@ export default function TabbedQueryRunnerPanel() {
           <ResultTable data={paginatedResult} totalResultCount={activeTab.result.length} />
           {activeTab.result.length > pageSize && (
             <div className="mt-2 flex flex-col gap-2 text-sm">
-              <div className="flex items-center gap-2">
-                <label htmlFor="rowsPerPage">Rows per page:</label>
+              <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 p-2 rounded-lg shadow-sm">
+                <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-sm font-medium mr-2">Rows per page:</label>
                 <select
                   id="rowsPerPage"
                   value={pageSize}
@@ -177,44 +192,44 @@ export default function TabbedQueryRunnerPanel() {
                     setPageSize(Number(e.target.value));
                     setTabPageMap(prev => ({ ...prev, [activeTabId]: 1 })); // Reset to page 1
                   }}
-                  className="border rounded px-2 py-1"
+                  className="border border-gray-300 dark:border-zinc-700 rounded px-2 py-1 bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-400"
                 >
                   {pageSizeOptions.map(opt => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-              </div>
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() =>
-                    setTabPageMap((prev) => ({
-                      ...prev,
-                      [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
-                    }))
-                  }
-                  disabled={currentPage === 1}
-                  className="px-2 py-1 border rounded disabled:opacity-50"
-                >
-                  Prev
-                </button>
-                <span>
-                  Page {currentPage} of {Math.ceil(activeTab.result.length / pageSize)}
-                </span>
-                <button
-                  onClick={() =>
-                    setTabPageMap((prev) => ({
-                      ...prev,
-                      [activeTabId]: Math.min(
-                        (prev[activeTabId] || 1) + 1,
-                        Math.ceil(activeTab.result.length / pageSize)
-                      ),
-                    }))
-                  }
-                  disabled={currentPage === Math.ceil(activeTab.result.length / pageSize)}
-                  className="px-2 py-1 border rounded disabled:opacity-50"
-                >
-                  Next
-                </button>
+                <div className="flex items-center gap-2 ml-auto">
+                  <button
+                    onClick={() =>
+                      setTabPageMap((prev) => ({
+                        ...prev,
+                        [activeTabId]: Math.max((prev[activeTabId] || 1) - 1, 1),
+                      }))
+                    }
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                  >
+                    <span className="inline-block mr-1">⟨</span> Prev
+                  </button>
+                  <span className="px-2 text-gray-700 dark:text-gray-200 font-medium">
+                    Page <span className="font-semibold text-blue-600 dark:text-blue-400">{currentPage}</span> of <span className="font-semibold text-blue-600 dark:text-blue-400">{Math.ceil(activeTab.result.length / pageSize)}</span>
+                  </span>
+                  <button
+                    onClick={() =>
+                      setTabPageMap((prev) => ({
+                        ...prev,
+                        [activeTabId]: Math.min(
+                          (prev[activeTabId] || 1) + 1,
+                          Math.ceil(activeTab.result.length / pageSize)
+                        ),
+                      }))
+                    }
+                    disabled={currentPage === Math.ceil(activeTab.result.length / pageSize)}
+                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                  >
+                    Next <span className="inline-block ml-1">⟩</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}

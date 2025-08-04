@@ -34,7 +34,7 @@ const queryHistory = [
   return (
     <div className="flex min-h-screen">
       {/* Sidebar for this page */}
-      <aside className={`w-sm  ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white`}>
+      <aside className={`flex-shrink-0 w-96 ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white`}>
         <div className="flex items-center mb-4">
           <Bars3CenterLeftIcon className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} mr-2`} />
           <span className="font-semibold">Side Panel</span>

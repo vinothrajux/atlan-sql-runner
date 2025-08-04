@@ -15,7 +15,7 @@ interface LeftPanelAccordionProps {
 export default function LeftPanelAccordion({
   tables,
   history,
-  // onSelect,
+  onSelect,
 }: LeftPanelAccordionProps) {
   const [search, setSearch] = useState('');
   const { theme } = useTheme();
@@ -48,14 +48,19 @@ export default function LeftPanelAccordion({
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">
-            <ul className="text-sm">
+            <ul className="text-sm max-h-48 overflow-y-auto">
               {filteredTables.map((table) => (
                 <li
                   key={table}
-                  className="cursor-pointer hover:underline py-1"
-                  // onClick={() => onSelect(`SELECT * FROM ${table};`)}
+                  className="cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2"
+                  onClick={() => {
+                    if (typeof onSelect === 'function') {
+                      onSelect(`SELECT * FROM ${table};`);
+                    }
+                  }}
                 >
-                  {table}
+                  <TableCellsIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400" />
+                  <span className="truncate font-medium">{table}</span>
                 </li>
               ))}
             </ul>
@@ -72,14 +77,19 @@ export default function LeftPanelAccordion({
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">
-            <ul className="text-sm">
+            <ul className="text-sm max-h-48 overflow-y-auto">
               {filteredHistory.map((q, i) => (
                 <li
                   key={i}
-                  className="cursor-pointer hover:underline py-1"
-                  // onClick={() => onSelect(q)}
+                  className="cursor-pointer py-1 px-2 mb-1 rounded transition hover:bg-blue-100 dark:hover:bg-zinc-700 flex items-center gap-2"
+                  onClick={() => {
+                    if (typeof onSelect === 'function') {
+                      onSelect(q);
+                    }
+                  }}
                 >
-                  {q.slice(0, 60)}...
+                  <ClockIcon className="h-4 w-4 text-blue-500 dark:text-zinc-400" />
+                  <span className="truncate" title={q}>{q.slice(0, 60)}...</span>
                 </li>
               ))}
             </ul>
