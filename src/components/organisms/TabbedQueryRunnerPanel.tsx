@@ -170,6 +170,7 @@ export default function TabbedQueryRunnerPanel() {
                   className={`absolute right-1 top-0 text-sm text-gray-900 cursor-pointer ${
                   tab.id === activeTabId ? 'bg-blue-600 text-white' : 'bg-gray-200'
                 }`}
+                aria-label={`Close tab ${tab.title}`}
                 >
                   <XMarkIcon className="h-3 w-3 mt-1" />
                 </button>
@@ -180,6 +181,7 @@ export default function TabbedQueryRunnerPanel() {
         <button
           onClick={addNewTab}
           className="ml-2 text-sm px-2 py-1 bg-green-500 text-white cursor-pointer"
+          aria-label="Add new tab"
         >
           <PlusIcon className="h-4 w-4 inline mb-0.5" />
         </button>

@@ -76,6 +76,7 @@ export default function LeftPanelAccordion({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="w-full p-2 rounded border bg-white text-gray-800 border-gray-300 shadow-xl mb-6"
+        aria-input-field-name="search"
       />
 
       <Accordion.Root type="multiple" className="space-y-2" defaultValue={["tables", "history"]}>
