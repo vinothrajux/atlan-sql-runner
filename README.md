@@ -6,9 +6,13 @@ A web-based SQL query runner built with Next.js, designed for fast, intuitive, a
 
 ### 🚀 Walkthrough Video
 
-This video has demo the application and how to execute queries is available:
+[Watch the walkthrough video](https://drive.google.com/file/d/1obPVHbZcLVeGS8nvzntoFgkQir6GZ883/view?usp=sharing)
 
-[![Watch the walkthrough video](https://drive.google.com/file/d/1obPVHbZcLVeGS8nvzntoFgkQir6GZ883/view?usp=sharing)](https://drive.google.com/file/d/1obPVHbZcLVeGS8nvzntoFgkQir6GZ883/view?usp=sharing)
+---
+
+### 📈 Google Page Insights Performance
+
+![Google Page Insights Performance](public/sql-runner-performance.png)
 
 ---
 
