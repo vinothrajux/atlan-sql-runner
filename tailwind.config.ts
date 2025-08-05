@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
+import scrollbar from 'tailwind-scrollbar';
 
 const config: Config = {
   darkMode: 'class',
@@ -35,7 +36,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [forms, typography],
+  plugins: [forms, typography, scrollbar],
   // darkMode: 'media', // or 'class' if you use a class-based toggle
 };
 

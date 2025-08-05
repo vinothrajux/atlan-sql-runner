@@ -150,31 +150,33 @@ export default function TabbedQueryRunnerPanel() {
       )}
       {/* Tab Headers */}
       <div className="flex items-center">
-        {tabs.map((tab) => (
-          <div key={tab.id} className="relative">
-            <button
-              onClick={() => setActiveTabId(tab.id)}
-              className={`px-3 py-1 pr-6 cursor-pointer ${
-                tab.id === activeTabId ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}
-            >
-              <CommandLineIcon className='h-4 w-4 mb-1 inline'/> {tab.title}
-            </button>
-            {tabs.length > 1 && (
+        <div className='flex max-w-11.5/12 overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+          {tabs.map((tab) => (
+            <div key={tab.id} className="relative">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeTab(tab.id);
-                }}
-                className={`absolute right-1 top-0 text-sm text-gray-900 cursor-pointer ${
-                tab.id === activeTabId ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}
+                onClick={() => setActiveTabId(tab.id)}
+                className={`px-3 py-1 pr-6 cursor-pointer whitespace-nowrap ${
+                  tab.id === activeTabId ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                }`}
               >
-                <XMarkIcon className="h-3 w-3 mt-1" />
+                <CommandLineIcon className='h-4 w-4 mb-1 inline'/> {tab.title}
               </button>
-            )}
-          </div>
-        ))}
+              {tabs.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeTab(tab.id);
+                  }}
+                  className={`absolute right-1 top-0 text-sm text-gray-900 cursor-pointer ${
+                  tab.id === activeTabId ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                }`}
+                >
+                  <XMarkIcon className="h-3 w-3 mt-1" />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
         <button
           onClick={addNewTab}
           className="ml-2 text-sm px-2 py-1 bg-green-500 text-white cursor-pointer"
