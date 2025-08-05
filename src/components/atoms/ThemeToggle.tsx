@@ -9,7 +9,7 @@ export default function ThemeToggle() {
   }, [dark]);
 
   return (
-    <button onClick={() => setDark(!dark)} className="ml-auto px-2 py-1 text-sm border rounded">
+    <button onClick={() => setDark(!dark)} className="ml-auto px-2 py-1 text-xs sm:text-sm border rounded">
       {dark ? 'Light Mode' : 'Dark Mode'}
     </button>
   );

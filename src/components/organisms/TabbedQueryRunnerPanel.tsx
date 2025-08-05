@@ -262,7 +262,7 @@ export default function TabbedQueryRunnerPanel() {
           {activeTab.result.length > 0 && (
             <div className="mt-2 flex flex-col gap-2 text-sm w-full">
               <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 p-2 rounded-lg shadow-sm">
-                <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-sm font-medium mr-2">Rows per page:</label>
+                <label htmlFor="rowsPerPage" className="text-gray-700 dark:text-gray-200 text-xs xl:text-sm font-medium mr-2">Rows per page:</label>
                 <select
                   id="rowsPerPage"
                   value={pageSize}
@@ -285,11 +285,11 @@ export default function TabbedQueryRunnerPanel() {
                       }))
                     }
                     disabled={currentPage === 1 || Math.ceil(activeTab.result.length / pageSize) <= 1}
-                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                    className="px-3 py-1 text-xs xl:text-sm rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
                   >
                     <span className="inline-block mr-1">⟨</span> Prev
                   </button>
-                  <span className="px-2 text-gray-700 dark:text-gray-200 font-medium">
+                  <span className="px-2 text-gray-700 text-xs xl:text-sm dark:text-gray-200 font-medium">
                     Page <span className="font-semibold text-blue-600 dark:text-blue-400">{currentPage}</span> of <span className="font-semibold text-blue-600 dark:text-blue-400">{Math.max(1, Math.ceil(activeTab.result.length / pageSize))}</span>
                   </span>
                   <button
@@ -303,7 +303,7 @@ export default function TabbedQueryRunnerPanel() {
                       }))
                     }
                     disabled={currentPage === Math.ceil(activeTab.result.length / pageSize) || Math.ceil(activeTab.result.length / pageSize) <= 1}
-                    className="px-3 py-1 rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                    className="px-3 py-1 text-xs xl:text-sm rounded border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
                   >
                     Next <span className="inline-block ml-1">⟩</span>
                   </button>

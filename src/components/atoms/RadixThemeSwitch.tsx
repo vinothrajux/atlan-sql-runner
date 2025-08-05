@@ -9,7 +9,7 @@ export default function RadixThemeSwitch() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm">{isDark ? 'Dark' : 'Light'} Mode</span>
+      <span className="text-xs sm:text-sm">{isDark ? 'Dark' : 'Light'} Mode</span>
       <Switch.Root
         checked={isDark}
         onCheckedChange={toggleTheme}
