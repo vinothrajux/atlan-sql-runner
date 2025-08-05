@@ -32,9 +32,9 @@ const queryHistory = [
   'SELECT category_name, COUNT(*) FROM products GROUP BY category_name;',
 ];
   return (
-    <div className="flex min-h-screen w-screen overflow-hidden">
+    <div className="flex flex-col sm:flex-row min-h-screen w-screen overflow-hidden">
       {/* Sidebar for this page */}
-      <aside className={`flex-shrink-0 w-96 max-w-md ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white h-screen overflow-y-auto`}>
+      <aside className={`flex-shrink-0 w-full sm:w-96 sm:max-w-md ${theme === 'dark' ? '' : 'bg-gray-100'} p-4 dark:text-white h-auto sm:h-screen overflow-y-auto`}>
         <div className="flex items-center mb-4">
           <Bars3CenterLeftIcon className={`h-6 w-6 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} mr-2`} />
           <span className="font-semibold">Side Panel</span>
@@ -52,7 +52,7 @@ const queryHistory = [
       </aside>
 
       {/* Main content next to sidebar */}
-      <main className="flex-1 p-6 bg-white dark:bg-black text-black dark:text-white h-screen overflow-y-auto max-w-full">
+      <main className="flex-1 p-6 bg-white dark:bg-black text-black dark:text-white h-auto sm:h-screen overflow-y-auto max-w-full">
         <TabbedQueryRunnerPanel />
       </main>
     </div>
