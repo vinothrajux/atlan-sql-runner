@@ -76,7 +76,6 @@ export default function LeftPanelAccordion({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="w-full p-2 rounded border bg-white text-gray-800 border-gray-300 shadow-xl mb-6"
-        aria-input-field-name="search"
       />
 
       <Accordion.Root type="multiple" className="space-y-2" defaultValue={["tables", "history"]}>
@@ -90,7 +89,7 @@ export default function LeftPanelAccordion({
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">
-            <ul className="text-sm max-h-48 overflow-y-auto">
+            <ul className="text-sm max-h-48 overflow-y-auto" tabIndex={0}>
               {filteredTables.map((table) => (
                 <li
                   key={table}
@@ -119,7 +118,7 @@ export default function LeftPanelAccordion({
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className="px-4 py-2">
-            <ul className="text-sm max-h-48 overflow-y-auto">
+            <ul className="text-sm max-h-48 overflow-y-auto" tabIndex={0}>
               {filteredHistory.map((q, i) => (
                 <li
                   key={i}

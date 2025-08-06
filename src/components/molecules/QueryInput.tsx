@@ -11,6 +11,15 @@ type Props = {
 export default function QueryInput({ value, onChange }: Props) {
   const { theme } = useTheme();
   return (
+    <>
+     <style>
+        {`
+          /* Fix color contrast for CodeMirror placeholder for accessibilty fix */
+          .cm-placeholder[aria-hidden="true"] {
+            color: #6d6d6d !important;
+          }
+        `}
+      </style>
     <div className="w-100% border-gray-300 border border-t-0">
       <Controlled
         value={value}
@@ -22,5 +31,6 @@ export default function QueryInput({ value, onChange }: Props) {
         style={{ fontSize: "14px" }}
       />
     </div>
+    </>
   );
 }

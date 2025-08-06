@@ -15,6 +15,7 @@ export default function RadixThemeSwitch() {
         onCheckedChange={toggleTheme}
         className="w-10 h-6 bg-gray-300 dark:bg-gray-700 rounded-full relative focus:outline-none cursor-pointer"
         id="theme-switch"
+        aria-label="Theme Switch"
       >
         <Switch.Thumb
           className={`block w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow transition-transform duration-200 absolute top-0.5 left-0 ${isDark ? 'translate-x-5' : 'translate-x-0'}`}
