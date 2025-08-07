@@ -16,7 +16,7 @@ export default function Header() {
         <Image width={80} height={24} alt="Atlan Logo" src="https://website-assets.atlan.com/img/atlan-blue.svg" />
       }
       </a>
-      <h1 className="text-sm sm:text-2xl font-bold text-center px-4">SQL Query Runner</h1>
+      <h1 className="text-sm sm:text-2xl font-bold text-center px-4">SQL Query Runner <span className='text-xs'>AI powered</span></h1>
       <RadixThemeSwitch />
     </div>
   )

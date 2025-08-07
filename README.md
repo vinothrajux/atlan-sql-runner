@@ -4,10 +4,17 @@ A web-based SQL query runner built with Next.js, designed for fast, intuitive, a
 
 ---
 
+### ✨ AI Query Generator
+
+You can now generate SQL queries from natural language using the built-in AI Query Generator powered by Cohere AI. Just describe your query in plain English and get instant SQL code suggestions in the editor.
+
+[AI Query generator Demo](https://drive.google.com/file/d/1QSgppat7JztNupVh5G1tAS_NDU_seTi8/view?usp=sharing)
+
+---
+
 ### 🚀 Walkthrough Video
 
 [Watch the walkthrough video](https://drive.google.com/file/d/1obPVHbZcLVeGS8nvzntoFgkQir6GZ883/view?usp=sharing)
-[AI Query generator Demo](https://drive.google.com/file/d/1QSgppat7JztNupVh5G1tAS_NDU_seTi8/view?usp=sharing)
 
 ---
 
