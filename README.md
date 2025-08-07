@@ -7,12 +7,14 @@ A web-based SQL query runner built with Next.js, designed for fast, intuitive, a
 ### 🚀 Walkthrough Video
 
 [Watch the walkthrough video](https://drive.google.com/file/d/1obPVHbZcLVeGS8nvzntoFgkQir6GZ883/view?usp=sharing)
+[AI Query generator Demo](https://drive.google.com/file/d/1QSgppat7JztNupVh5G1tAS_NDU_seTi8/view?usp=sharing)
 
 ---
 
 ### 📈 Google Page Insights Performance
 
 ![Google Page Insights Performance](public/sql-runner-performance.png)
+![AI Query Seach](public/AI-Query-generator.png)
 
 ---
 
