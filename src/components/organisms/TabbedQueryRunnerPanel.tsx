@@ -6,7 +6,6 @@ import ResultTable from '../molecules/ResultTable';
 import Button from '../atoms/Button';
 import { downloadCSV } from '../../utils/download';
 import { ArrowDownTrayIcon, CommandLineIcon, DocumentDuplicateIcon, PlayIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useTheme } from '../../context/ThemeProvider';
 
 type QueryTab = {
   id: number;
@@ -23,8 +22,6 @@ export default function TabbedQueryRunnerPanel() {
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { theme } = useTheme();
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)!;
 
