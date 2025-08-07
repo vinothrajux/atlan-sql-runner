@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
         max_tokens: 128,
       }),
     });
-    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = await response.json();
     let sqlQuery = data.generations?.[0]?.text || "";
     const match = sqlQuery.match(/```sql\s*([\s\S]*?)```/i);
     if (match) {
