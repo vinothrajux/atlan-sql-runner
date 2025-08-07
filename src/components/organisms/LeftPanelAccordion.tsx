@@ -101,7 +101,7 @@ export default function LeftPanelAccordion({
                   }}
                 >
                   <QueueListIcon className={`h-4 w-4 text-blue-500 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} dark:text-zinc-400 icon-in-list`} />
-                  <span className="truncate font-medium text-in-list">{table}</span>
+                  <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-700'} truncate text-in-list`}>{table}</span>
                 </li>
               ))}
             </ul>
@@ -131,7 +131,7 @@ export default function LeftPanelAccordion({
                   }}
                 >
                   <ChevronRightIcon className={`h-4 w-4 text-blue-500 ${theme === 'dark' ? 'text-white' : 'text-blue-500'} dark:text-zinc-400 icon-in-list`} />
-                  <span className="truncate text-in-list" title={q}>
+                  <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-700'} truncate text-in-list`} title={q}>
                     {q.length > 60 ? `${q.slice(0, 60)}...` : q}
                   </span>
                 </li>
