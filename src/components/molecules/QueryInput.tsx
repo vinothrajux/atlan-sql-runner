@@ -44,14 +44,14 @@ export default function QueryInput({ value, onChange }: Props) {
         `}
       </style>
       <div className="border-gray-300 border border-b-2 p-3">
-         <h2 className="mb-1"><SparklesIcon className="inline h-6 w-6 mb-2 text-blue-800"/> <span className="text-xl">AI Search</span></h2>
+         <h2 className="mb-1"><SparklesIcon className="inline h-6 w-6 mb-2 text-blue-800"/> <span className="text-xl">AI SQL Query Generation</span></h2>
         <div className=" flex gap-2 items-center">
           
           <input
             type="text"
             value={nlInput}
             onChange={e => setNlInput(e.target.value)}
-            placeholder="AI Search- Describe your query in natural language... for eg: fetch data from orders table"
+            placeholder="AI Generation- Describe your query in natural language... for eg: fetch data from orders table"
             className="border border-gray-400 px-2 py-1 rounded w-full text-sm"
           />
           <button
