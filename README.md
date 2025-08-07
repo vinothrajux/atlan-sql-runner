@@ -10,6 +10,8 @@ You can now generate SQL queries from natural language using the built-in AI Que
 
 [AI Query generator Demo](https://drive.google.com/file/d/1QSgppat7JztNupVh5G1tAS_NDU_seTi8/view?usp=sharing)
 
+![AI Query Seach](public/AI-Query-generator.png)
+
 ---
 
 ### 🚀 Walkthrough Video
@@ -21,7 +23,6 @@ You can now generate SQL queries from natural language using the built-in AI Que
 ### 📈 Google Page Insights Performance
 
 ![Google Page Insights Performance](public/sql-runner-performance.png)
-![AI Query Seach](public/AI-Query-generator.png)
 
 ---
 
